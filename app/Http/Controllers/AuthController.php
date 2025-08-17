@@ -21,7 +21,6 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
             $user = $request->user();
             $token = $user->createToken('authToken')->plainTextToken;
 
@@ -38,10 +37,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::guard('web')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        $request->user()->currentAccessToken()->delete();
+       $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Successfully logged out']);
     }
 
@@ -62,14 +58,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-        ], [
-            'name.required' => 'The name field is required.',
-            'email.required' => 'The email field is required.',
-            'email.email' => 'Please enter a valid email address.',
-            'email.unique' => 'This email is already in use.',
-            'password.required' => 'The password field is required.',
-            'password.min' => 'The password must be at least 8 characters.',
-            'password.confirmed' => 'The password confirmation does not match.',
+            'password_confirmation' => 'required|string|min:8',
         ]);
 
         try {
@@ -87,14 +76,13 @@ class AuthController extends Controller
 
             return response()->json([
                 'message' => 'User registered successfully!',
-                'user' => $user,
                 'token' => $token,
             ], 201);
 
         } catch (\Exception $e) {
             DB::rollBack();
 
-            \Log::error('Error registering user: ' . $e->getMessage());
+            Log::error('Error registering user: ' . $e->getMessage());
 
             return response()->json([
                 'message' => 'An error occurred while processing your registration. Please try again later.',
