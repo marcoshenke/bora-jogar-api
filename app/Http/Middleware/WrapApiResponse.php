@@ -26,7 +26,7 @@ class WrapApiResponse
             $data = $response->getData();
 
             if (!isset($data->data)) {
-                $response->setData([$data]);
+                $response->setData($data);
             }
         }
 
