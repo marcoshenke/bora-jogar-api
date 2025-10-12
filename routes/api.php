@@ -10,6 +10,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
+Route::post('/verify-reset-token', [PasswordResetController::class, 'verifyToken']);
 
 // protect routes
 Route::middleware('auth:sanctum')->group(function () {
