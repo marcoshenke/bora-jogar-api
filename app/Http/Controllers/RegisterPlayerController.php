@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Player; // Importar o modelo Player
+use App\Models\Player;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage; // Importar o facade Storage
-use Illuminate\Validation\ValidationException; // Importar ValidationException
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class RegisterPlayerController extends Controller
 {
@@ -37,5 +37,32 @@ class RegisterPlayerController extends Controller
             'message' => 'Player profile created successfully!',
             'player' => $player,
         ], 201);
+    }
+
+    // transform in action after
+    public function uploadProfilePicture(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB max
+        ]);
+
+        try {
+            $file = $request->file('file');
+            $fileName = 'profile-pictures/' . Str::uuid() . '.' . $file->getClientOriginalExtension();
+
+            Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
+
+            $url = Storage::disk('s3')->url($fileName);
+
+            return response()->json([
+                'url' => $url,
+                'path' => $fileName
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error during upload: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'Unable to upload the file.'
+            ], 500);
+        }
     }
 }
