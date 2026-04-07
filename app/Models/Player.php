@@ -13,12 +13,11 @@ class Player extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'fullName',
+        'full_name',
         'city',
         'avatar',
         'bio',
         'user_id',
-        'max_distance',
     ];
 
     /**

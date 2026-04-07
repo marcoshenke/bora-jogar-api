@@ -37,7 +37,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-       $request->user()->currentAccessToken()->delete();
+        $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Successfully logged out']);
     }
 
@@ -78,7 +78,6 @@ class AuthController extends Controller
                 'message' => 'User registered successfully!',
                 'token' => $token,
             ], 201);
-
         } catch (\Exception $e) {
             DB::rollBack();
 
