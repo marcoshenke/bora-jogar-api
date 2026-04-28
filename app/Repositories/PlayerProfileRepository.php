@@ -2,19 +2,19 @@
 
 namespace App\Repositories;
 
-use App\Models\Player;
+use App\Models\PlayerProfile;
 
-class PlayerRepository
+class PlayerProfileRepository
 {
     private $model;
 
     public function __construct(
-        Player $model
+        PlayerProfile $model
     ) {
         $this->model = $model;
     }
 
-    public function create(array $data): Player
+    public function create(array $data): PlayerProfile
     {
         return $this->model->create($data);
     }
