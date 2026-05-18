@@ -1,0 +1,56 @@
+en:
+  activerecord:
+    models:
+      user: User
+      player: Player
+      player_profile: PlayerProfile
+      player_availability: PlayerAvailability
+      sport: Sport
+      position: Position
+      week_day: WeekDay
+    attributes:
+      user:
+        email: Email
+        password: Password
+        password_confirmation: Password confirmation
+        name: Name
+      player:
+        full_name: Full name
+        city: City
+        avatar: Avatar
+        bio: Bio
+      player_profile:
+        dominant_foot: Dominant foot
+        playing_style: Playing style
+        skill_level: Skill level
+        playing_frequency: Playing frequency
+  devise:
+    sessions:
+      signed_in: Signed in successfully
+      signed_out: Signed out successfully
+      already_signed_out: Already signed out
+    registrations:
+      signed_up: Welcome! You have signed up successfully
+      signed_up_but_unconfirmed: A message with a confirmation link has been sent to your email address
+      signed_up_but_inactive: You have signed up successfully. However, we could not sign you in because your account is not yet activated
+      update_needs_confirmation: You updated your account successfully, but we need to verify your new email address
+      updated: Your account has been updated successfully
+      updated_but_not_signed_in: Your account has been updated successfully, but since your password was changed, you need to sign in again
+    passwords:
+      send_instructions: You will receive an email with instructions on how to reset your password in a few minutes
+      updated: Your password has been changed successfully. You are now able to log in with your new password
+      updated_not_active: Your password has been changed successfully
+      no_token: You can't access this page without coming from a password reset email
+    confirmations:
+      send_instructions: You will receive an email with instructions on how to confirm your account in a few minutes
+      confirmed: Your account has been confirmed successfully. You are now able to log in
+    failure:
+      already_authenticated: You are already signed in
+      inactive: Your account is not activated yet
+      invalid: Invalid %{authentication_keys} or password
+      locked: Your account is locked
+      last_attempt: You have one more attempt before your account is locked
+      not_found_in_database: If your email address exists in our database, you will receive password reset instructions shortly
+      timeout: Your session expired. Please sign in again to continue
+      unauthenticated: You need to sign in or sign up before continuing
+      unconfirmed: You have to confirm your email address before continuing
