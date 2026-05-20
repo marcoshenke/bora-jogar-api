@@ -24,13 +24,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_01_000009) do
 
   create_table "player_availabilities", force: :cascade do |t|
     t.bigint "player_id", null: false
-    t.bigint "week_day_id", null: false
+    t.integer "week_day", null: false
     t.time "start_time", null: false
     t.time "end_time", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["player_id", "week_day"], name: "index_player_availabilities_on_player_id_and_week_day"
     t.index ["player_id"], name: "index_player_availabilities_on_player_id"
-    t.index ["week_day_id"], name: "index_player_availabilities_on_week_day_id"
   end
 
   create_table "player_profile_positions", force: :cascade do |t|
@@ -95,14 +95,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_01_000009) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "week_days", force: :cascade do |t|
-    t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   add_foreign_key "player_availabilities", "players"
-  add_foreign_key "player_availabilities", "week_days"
   add_foreign_key "player_profile_positions", "player_profiles"
   add_foreign_key "player_profile_positions", "positions"
   add_foreign_key "player_profiles", "players"
