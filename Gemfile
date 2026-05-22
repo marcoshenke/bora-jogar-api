@@ -19,6 +19,10 @@ gem "tzinfo-data", platforms: [:windows, :jruby]
 
 group :development, :test do
   gem "debug", platforms: [:mri, :windows]
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'shoulda-matchers'
 end
 
 group :development do

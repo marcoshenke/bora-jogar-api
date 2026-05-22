@@ -12,6 +12,8 @@ Devise.setup do |config|
   config.reset_password_within = 6.hours
   config.sign_out_via = :delete
 
+  config.secret_key = Rails.application.secret_key_base
+
   config.jwt do |jwt|
     jwt.secret = ENV.fetch('DEVISE_JWT_SECRET_KEY', 'default_secret_key_change_in_production')
     jwt.expiration_time = 1.week.to_i
