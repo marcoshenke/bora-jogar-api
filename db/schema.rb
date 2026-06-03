@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_20_024755) do
+ActiveRecord::Schema[7.1].define(version: 2026_06_03_193749) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,8 +25,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_20_024755) do
   create_table "player_availabilities", force: :cascade do |t|
     t.bigint "player_id", null: false
     t.integer "week_day", null: false
-    t.time "start_time", null: false
-    t.time "end_time", null: false
+    t.integer "preferred_time", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["player_id", "week_day"], name: "index_player_availabilities_on_player_id_and_week_day"
@@ -61,6 +60,11 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_20_024755) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["player_id"], name: "index_player_profiles_on_player_id"
+  end
+
+  create_table "player_profiles_positions", id: false, force: :cascade do |t|
+    t.bigint "player_profile_id", null: false
+    t.bigint "position_id", null: false
   end
 
   create_table "players", force: :cascade do |t|
