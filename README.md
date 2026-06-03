@@ -1,61 +1,237 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Bora Jogar API - Ruby on Rails
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A REST API for the "Bora Jogar" sports platform, migrated from Laravel (PHP) to Ruby on Rails 7.1 with PostgreSQL.
 
-## About Laravel
+## Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This project replaces the previous Laravel API with a Ruby on Rails implementation, maintaining all original functionality while improving code structure and maintainability.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Framework**: Ruby on Rails 7.1 (API mode)
+- **Database**: PostgreSQL 15
+- **Authentication**: Devise + JWT (custom implementation)
+- **Container**: Docker & Docker Compose
+- **Ruby Version**: 3.3.11
 
-## Learning Laravel
+## Project Structure
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```
+bora-jogar-api/
+├── app/
+│   ├── controllers/
+│   │   ├── api/v1/          # API version 1 controllers
+│   │   │   ├── players_controller.rb
+│   │   │   ├── player_profiles_controller.rb
+│   │   │   ├── player_availabilities_controller.rb
+│   │   │   ├── sports_controller.rb
+│   │   │   ├── positions_controller.rb
+│   │   │   └── users/       # Devise controllers
+│   │   │       ├── sessions_controller.rb
+│   │   │       ├── registrations_controller.rb
+│   │   │       └── passwords_controller.rb
+│   │   └── application_controller.rb
+│   ├── models/             # ActiveRecord models
+│   │   ├── user.rb
+│   │   ├── player.rb
+│   │   ├── player_profile.rb
+│   │   ├── player_availability.rb
+│   │   ├── sport.rb
+│   │   ├── position.rb
+│   │   ├── week_day.rb
+│   │   └── jwt_denylist.rb
+│   └── serializers/        # JSON serialization
+├── config/
+│   ├── routes.rb           # API routes
+│   ├── database.yml        # PostgreSQL config
+│   └── environments/       # Rails environments
+├── db/
+│   ├── migrations/         # Database migrations
+│   └── seeds.rb           # Initial data
+├── docker-compose.yml     # Docker services
+├── Dockerfile            # Rails container
+└── Gemfile               # Ruby dependencies
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Getting Started
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prerequisites
 
-## Laravel Sponsors
+- Docker and Docker Compose installed
+- PostgreSQL (provided via Docker)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Running the Application
 
-### Premium Partners
+1. **Start the containers:**
+   ```bash
+   docker compose up -d --build
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+2. **Run migrations:**
+   ```bash
+   docker compose exec web bundle exec rails db:create db:migrate
+   ```
 
-## Contributing
+3. **Seed initial data:**
+   ```bash
+   docker compose exec web bundle exec rails db:seed
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. **Access the API:**
+   - Base URL: `http://localhost:3000`
+   - Health check: `GET /up`
 
-## Code of Conduct
+## API Endpoints
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Authentication
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/v1/users` | Register new user |
+| POST | `/api/v1/users/sign_in` | Login |
+| DELETE | `/api/v1/users/sign_out` | Logout |
+| POST | `/api/v1/users/password` | Forgot password |
+| PUT | `/api/v1/users/password` | Reset password |
 
-## Security Vulnerabilities
+### Players
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/v1/players` | Create player profile |
+| GET | `/api/v1/players` | Get current player |
+| PUT | `/api/v1/players` | Update player |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Player Profiles
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/v1/players/profile` | Get profile |
+| PUT | `/api/v1/players/profile` | Update profile |
+
+### Player Availabilities
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/v1/players/availabilities` | List availabilities |
+| POST | `/api/v1/players/availabilities` | Create availability |
+| DELETE | `/api/v1/players/availabilities/:id` | Delete availability |
+
+### Reference Data
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/v1/sports` | List sports |
+| GET | `/api/v1/sports/:id` | Get sport with positions |
+| GET | `/api/v1/positions` | List positions |
+| GET | `/api/v1/week_days` | List week days |
+
+### Authentication via JWT
+
+Include JWT token in the Authorization header:
+```
+Authorization: Bearer <your_jwt_token>
+```
+
+## Example Usage
+
+### Register a new user:
+```bash
+curl -X POST http://localhost:3000/api/v1/users \
+  -H "Content-Type: application/json" \
+  -d '{"user": {"name": "John Doe", "email": "john@example.com", "password": "password123", "password_confirmation": "password123"}}'
+```
+
+### Login:
+```bash
+curl -X POST http://localhost:3000/api/v1/users/sign_in \
+  -H "Content-Type: application/json" \
+  -d '{"user": {"email": "john@example.com", "password": "password123"}}'
+```
+
+### Create Player (with JWT):
+```bash
+curl -X POST http://localhost:3000/api/v1/players \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{"player": {"full_name": "John Doe", "city": "São Paulo"}}'
+```
+
+## Models
+
+### User
+- `name` (string)
+- `email` (string, unique)
+- `encrypted_password` (string)
+- Associations: has_one :player
+
+### Player
+- `full_name` (string)
+- `city` (string)
+- `avatar` (string)
+- `bio` (text)
+- `user_id` (references User)
+- Associations: has_one :profile, has_many :availabilities
+
+### PlayerProfile
+- `favorite_position` (string)
+- `dominant_foot` (string: right, left, both)
+- `playing_style` (string: fun, competitive, technical, social)
+- `skill_level` (string: beginner, intermediate, regular, star)
+- `playing_frequency` (string: weekly, occasionally, rarely)
+- Associations: belongs_to :player, has_and_belongs_to_many :positions
+
+### PlayerAvailability
+- `week_day_id` (references WeekDay)
+- `start_time` (time)
+- `end_time` (time)
+- Associations: belongs_to :player, belongs_to :week_day
+
+### Sport & Position
+- Sport has_many :positions
+- Position belongs_to :sport
+
+### WeekDay
+- `name` (string: Segunda-feira, Terça-feira, etc.)
+
+## Configuration
+
+### Environment Variables
+Create a `.env` file or use Docker Compose environment:
+- `RAILS_ENV`: development/test/production
+- `DB_HOST`: PostgreSQL host
+- `DB_USERNAME`: PostgreSQL user
+- `DB_PASSWORD`: PostgreSQL password
+- `DEVISE_JWT_SECRET_KEY`: JWT signing secret
+
+## Next Steps
+
+### High Priority
+1. **Fix Session/Logout**: Implement proper JWT logout by adding token to denylist
+2. **Password Recovery**: Complete forgot/reset password functionality with email
+3. **Email Integration**: Set up ActionMailer for password reset emails
+4. **Input Validation**: Add more robust request validation with specific error messages
+
+### Medium Priority
+1. **Profile Image Upload**: Implement avatar upload functionality (was present in Laravel)
+2. **API Versioning**: Add v2 endpoint structure for future improvements
+3. **Rate Limiting**: Add request throttling to prevent abuse
+4. **API Documentation**: Add Swagger/OpenAPI documentation
+
+### Low Priority
+1. **Testing**: Add RSpec test suite
+2. **Caching**: Implement Redis caching for frequently accessed data
+3. **Background Jobs**: Add Sidekiq for async operations (notifications, emails)
+4. **Webhooks**: Add webhook support for external integrations
+5. **Real-time**: Add ActionCable for real-time features
+
+### Features from Original Laravel App
+1. Sports and Positions data management
+2. Player profile preferences (foot, style, skill level)
+3. Weekly availability scheduling
+4. Multi-sport support (Futebol, Futsal, Vôlei, etc.)
+
+## Known Issues / Limitations
+
+1. **JWT Logout**: Currently tokens don't expire automatically - need to implement token blacklisting properly
+2. **Email**: Password reset emails not fully implemented
+3. **File Upload**: Avatar upload needs to be reimplemented
+4. **Confirmable**: Email confirmation disabled for simplicity
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is for educational and development purposes.
